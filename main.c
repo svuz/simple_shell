@@ -5,8 +5,8 @@
 #include <sys/wait.h>
 #include "shell.h"
 
-int run(void)
-{
+
+int run(void){
     char input[MAX_COMMAND_LENGTH];
     while (1)
     {
