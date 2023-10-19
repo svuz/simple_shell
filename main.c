@@ -5,9 +5,8 @@
 #include <sys/wait.h>
 
 #define MAX_COMMAND_LENGTH 100
-
-int main() {
-    char input[MAX_COMMAND_LENGTH];
+int run(){
+        char input[MAX_COMMAND_LENGTH];
     
     while (1) {
         printf("Shell > ");
@@ -52,4 +51,8 @@ int main() {
     }
     
     return 0;
+}
+int main() {
+    run()
+
 }
