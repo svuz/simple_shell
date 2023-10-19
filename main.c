@@ -8,12 +8,9 @@
 int run(void)
 {
     char input[MAX_COMMAND_LENGTH];
-    while(1)
+    while (1)
     {
         printf("$");
-        
-        // Read a command from the user
-        
         if (fgets(input, sizeof(input), stdin) == NULL)
         {
             perror("Failed to read input");
