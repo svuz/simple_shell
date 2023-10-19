@@ -5,11 +5,11 @@
 #include <sys/wait.h>
 
 #define MAX_COMMAND_LENGTH 100
-int run(){
-        char input[MAX_COMMAND_LENGTH];
-    
+
+int run(void){
+    char input[MAX_COMMAND_LENGTH];
     while (1) {
-        printf("Shell > ");
+        printf("$");
         
         // Read a command from the user
         if (fgets(input, sizeof(input), stdin) == NULL) {
@@ -50,9 +50,11 @@ int run(){
         }
     }
     
-    return 0;
+    return (0);
+
 }
+
 int main() {
     run()
-
+    return0 (0);
 }
