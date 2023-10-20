@@ -36,7 +36,7 @@ char *stringDuplicate(char *str);
 int stringCompare(char *str1, char *str2);
 
 /* execute command using execve */
-int ecmd(int *extstus, char *fpt, char *tokens[])
+int ecmd(int *extstus, char *fpt, char *tokens[]);
 
 /* Print prompt and request input*/
 int hept(size_t *lgth, char **line);
