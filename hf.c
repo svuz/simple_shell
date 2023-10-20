@@ -1,142 +1,146 @@
 #include "main.h"
 
 /**
- * Calculate the length of a string.
+ * _strlen - Entry point
+ * Description: 'find the string lenght'
  *
- * @param str: The input string.
- * @return The length of the string.
+ * @str: 'string'
+ * Return: lenght of string
  */
-int stringLength(char *str)
+
+int _strlen(char *str)
 {
-    int length = 0;
+	int i = 0;
 
-    if (str == NULL)
-        str = "";
+	if (str == NULL)
+		str = ""; /* end if */
+	while (*str != '\0')
+	{
+		i++;
+		str++;
+	} /* end while */
+	return (i);
+} /* End function */
 
-    while (*str != '\0')
-    {
-        length++;
-        str++;
-    }
-
-    return length;
-}
 
 /**
- * Copy the contents of one string to another.
+ * _strcpy - Entry point
+ * Description: 'copy strings from src to dest'
  *
- * @param dest: The destination string.
- * @param src: The source string.
- * @return The copied string.
+ * @dest: 'destination'
+ * @src: 'source'
+ * Return: copied string
  */
-char *stringCopy(char *dest, char *src)
+char *_strcpy(char *dest, char *src)
 {
-    int i = 0;
+	int i = 0;
 
-    while (i <= stringLength(src))
-    {
-        dest[i] = src[i];
-        i++;
-    }
+	while (i <= _strlen(src))
+	{
+		dest[i] = src[i];
+		i++;
+	} /* end while */
+	return (dest);
+} /* end function */
 
-    return dest;
-}
 
 /**
- * Concatenate two strings.
+ * _strcat - Entry poiont
+ * Description: 'concatenate string'
  *
- * @param dest: The destination string.
- * @param src: The source string.
- * @return The concatenated string.
+ * @dest: 'destination'
+ * @src: 'source'
+ * Return: concartenated string
  */
-char *stringConcatenate(char *dest, char *src)
+char *_strcat(char *dest, char *src)
 {
-    int i = 0;
-    char *temp = dest;
+	int i = 0;
+	char *temp = dest;
 
-    while (*temp != '\0')
-    {
-        temp++;
-    }
+	while (*temp != '\0')
+	{
+		temp++;
+	} /* end while */
+	while (i < _strlen(src))
+	{
+		*temp = src[i];
+		temp++;
+		i++;
+	} /* end while */
+	*temp = '\0';
+	return (dest);
+} /* end function */
 
-    while (i < stringLength(src))
-    {
-        *temp = src[i];
-        temp++;
-        i++;
-    }
 
-    *temp = '\0';
-    return dest;
-}
 
 /**
- * Duplicate a string and return a pointer to the copy.
+ * _strdup - Entry point
+ * Description: 'duplicate a string'
  *
- * @param str: The input string.
- * @return A pointer to a newly allocated memory block containing a duplicate of the input string.
+ * @str: 'string'
+ * Return: returns a pointer to a newly allocated memory
+ * block containing a duplicate of the input string
  */
-char *stringDuplicate(char *str)
+char *_strdup(char *str)
 {
-    char *copy;
-    int i = 0;
+	char *myStr;
+	int i = 0;
 
-    if (str == NULL)
-    {
-        return NULL;
-    }
+	if (str == NULL)
+	{
+		return (NULL);
+	} /* end if */
+	myStr = (char *)malloc(strlen(str) * sizeof(char) + 1);
+	if (myStr == NULL)
+	{
+		return (NULL);
+	} /* end if */
+	while (i <= (int)strlen(str))
+	{
+		myStr[i] = str[i];
+		i++;
+	} /* end if */
+	return (myStr);
+} /* end function */
 
-    copy = (char *)malloc(stringLength(str) * sizeof(char) + 1);
-
-    if (copy == NULL)
-    {
-        return NULL;
-    }
-
-    while (i <= (int)stringLength(str))
-    {
-        copy[i] = str[i];
-        i++;
-    }
-
-    return copy;
-}
 
 /**
- * Compare two strings lexicographically.
+ * _strcmp - Entry point
+ * Description: 'compares two strings'
  *
- * @param str1: The first string.
- * @param str2: The second string.
- * @return 0 if the strings are equal, a positive value if str1 is greater, and a negative value if str1 is less.
+ *
+ * @str1: 'string 1'
+ * @str2: 'stri'
+ *
+ * Return: 'If str1 is lexicographically less than str2,'
+ * 'strcmp returns a negative integer value (usually -1).'
+ * 'If str1 is lexicographically greater than str2,'
+ * 'strcmp returns a positive integer value (usually 1).'
+ * 'If str1 is lexicographically equal to str2,'
+ * 'strcmp returns zero.'
  */
-int stringCompare(char *str1, char *str2)
+int _strcmp(char *str1, char *str2)
 {
-    int i = 0;
-    int len1, len2;
+	int i = 0;
+	int len1, len2;
 
-    if (str1 == NULL)
-        str1 = "";
-
-    if (str2 == NULL)
-        str2 = "";
-
-    len1 = stringLength(str1);
-    len2 = stringLength(str2);
-
-    if (len1 > len2)
-        return 1;
-
-    else if (len1 < len2)
-        return -1;
-
-    while (i < len1)
-    {
-        if (str1[i] != str2[i])
-        {
-            return -1;
-        }
-        i++;
-    }
-
-    return 0;
-}
+	if (str1 == NULL)
+		str1 = ""; /* end if */
+	if (str2 == NULL)
+		str2 = ""; /* end if */
+	len1 = _strlen(str1);
+	len2 = _strlen(str2);
+	if (len1 > len2)
+		return (1); /* end if */
+	else if (len1 < len2)
+		return (-1); /* end elif */
+	while (i < len1)
+	{
+		if (str1[i] != str2[i])
+		{
+			return (-1);
+		} /* end if */
+		i++;
+	} /* end while */
+	return (0);
+} /* end function */

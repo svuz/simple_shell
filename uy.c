@@ -1,39 +1,39 @@
 #include "main.h"
 
+
 /**
- * Convert a string to an integer.
- * @param str: The input string.
- * @return The integer value.
+ * _atoi - convert string to integer
+ * @str: given string
+ * Return: integer
  */
-int convertStringToInt(char *str)
+int _atoi(char *str)
 {
-    int result = 0; // Stores the converted integer.
-    int isPositive = 1; // Tracks whether the integer is positive.
-    int i = 0; // Counter.
+	int result = 0; /* stores converted int */
+	int is_positive = 1; /* track int if it is +ve */
+	int i = 0; /* counter */
 
-    // Check if the character at index 0 is positive or negative.
-    if (str[0] == '-')
-    {
-        isPositive = -1;
-        i = 1;
-    }
+	/* check if the char at index 0 is -ve / +ve */
+	if (str[0] == '-')
+	{
+		is_positive = -1;
+		i = 1;
+	} /* End if */
 
-    // Iterate through the string.
-    while (str[i] != '\0')
-    {
-        // Validate if the current character is a digit.
-        if (str[i] >= '0' && str[i] <= '9')
-        {
-            // Convert the character to a digit and update the result.
-            result = result * 10 + (str[i] - '0');
-            i++;
-        }
-        else
-        {
-            // If a non-digit character is encountered, break the loop.
-            break;
-        }
-    }
-
-    return (isPositive * result);
-}
+	/* Iterate through the loop */
+	while (str[i] != '\0')
+	{
+		/* Validate if the current char is digit */
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			/* convert to digit and update result */
+			result = result * 10 + (str[i] - '0');
+			i++;
+		} /* end if */
+		else
+		{
+			/* for a non digit char */
+			break;
+		} /* end else */
+	} /* end while */
+	return (is_positive * result);
+} /* ens function */

@@ -1,5 +1,4 @@
 #include "main.h"
-
 /**
  * error_message - prints out error message
  * @tokens: array containing user input
@@ -7,7 +6,6 @@
  * @exit_status: exit status
  * Return: void
  */
- 
 void error_message(char **tokens, char **argv, int *exit_status)
 {
 	char newline = '\n';

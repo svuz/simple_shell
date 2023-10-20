@@ -15,55 +15,55 @@
 extern char **environ;
 
 /* path checker function */
-int pathExists(char *path);
+int check_path(char *path);
 
 /* custom _which function  */
-char *findFullPath(char *filename, char *path);
+char *_which(char *filename, char *path);
 
 /* string lenght function */
-int stringLength(char *str);
+int _strlen(char *str);
 
 /* string copy function */
-char *stringCopy(char *dest, char *src);
+char *_strcpy(char *dest, char *src);
 
 /* concatenate string */
-char *stringConcatenate(char *dest, char *src);
+char *_strcat(char *dest, char *src);
 
 /* duplicate string */
-char *stringDuplicate(char *str);
+char *_strdup(char *str);
 
 /* compare strings */
-int stringCompare(char *str1, char *str2);
+int _strcmp(char *str1, char *str2);
 
 /* execute command using execve */
-int ecmd(int *extstus, char *fpt, char *tokens[]);
+int exec_command(int *exit_status, char *fullpath, char *tokens[]);
 
 /* Print prompt and request input*/
-int hept(size_t *lgth, char **line);
+int handle_prompt(size_t *length, char **line);
 
 /* check for builtins */
-int chbui(int tnc, char **tkns, int *extstus, char **argv);
+int check_builtins(int cnt, char **tokens, int *exit_status, char **argv);
 
 /* check if file is executable */
 int _ch(char **argv, char **tokens, char **fullpath, int *exit_status);
 
 /* get an environment variable*/
-char *getEnvironmentVariable(char *name);
+char *_getenv(char *name);
 
 /*compare n characters of strings*/
-int compareStrings(char *str1, char *str2, int n);
+int _strncmp(char *str1, char *str2, int n);
 
 /* unset environment variable */
-int unsetEnvironmentVariable(char *name);
+int _unsetenv(char *name);
 
 /* Realloc implementation*/
-void *reallocateMemory(void *ptr, size_t size);
+void *_realloc(void *ptr, size_t size);
 
 /*getline implementation*/
-ssize_t readLine(char **linePtr, size_t *buffSize, FILE *myFile);
+ssize_t _getline(char **linePtr, size_t *buff_size, FILE *my_file);
 
 /* convert string to integer */
-int convertStringToInt(char *str);
+int _atoi(char *str);
 
 /* error message */
 void error_message(char **tokens, char **argv, int *exit_status);

@@ -1,12 +1,12 @@
 #include "main.h"
 /**
- * ecmd - creates a procs son
- * @extstus: exit status
- * @fpt: executable command
+ * exec_command - creates a child process and execute command
+ * @exit_status: exit status
+ * @fullpath: executable command
  * @tokens: array of arguments passed
  * Return: void
  */
-int ecmd(int *extstus, char *fpt, char *tokens[])
+int exec_command(int *exit_status, char *fullpath, char *tokens[])
 {
 	pid_t child;
 	int status;
@@ -19,30 +19,31 @@ int ecmd(int *extstus, char *fpt, char *tokens[])
 	} /* end if */
 	if (child == 0)
 	{
-		execve(fpt, tokens, environ);
-		*extstus = 2;
+		execve(fullpath, tokens, environ);
+		*exit_status = 2;
 		perror("execve");
-		exit(*extstus);
+		exit(*exit_status);
 	} /* end if */
 	else
 	{
 		wait(&status);
 		if (WIFEXITED(status))
 		{
-			*extstus = WEXITSTATUS(status);
+			*exit_status = WEXITSTATUS(status);
 		} /* end if */
 	} /* end else */
-	if (fpt != tokens[0])
-		free(fpt);
+	if (fullpath != tokens[0])
+		free(fullpath);
 	return (0);
 } /* end function */
 
 /**
- * hept - prints prompt and gets input
- * @lgth: lgth of put
- * @line: input stored
+ * handle_prompt - prints prompt and gets input
+ * @length: length of input
+ * @line: user input stored
+ * Return: void
  */
-int hept(size_t *lgth, char **line)
+int handle_prompt(size_t *length, char **line)
 {
 	ssize_t bytes_read;
 	char newline = '\n';
@@ -52,7 +53,7 @@ int hept(size_t *lgth, char **line)
 	{
 		write(STDOUT_FILENO, "$ ", 2);
 	} /* end if */
-	bytes_read = getline(line, lgth, stdin);
+	bytes_read = getline(line, length, stdin);
 	if (bytes_read == -1)
 	{
 		if (is_interactive)
@@ -67,37 +68,38 @@ int hept(size_t *lgth, char **line)
 /**
  * check_builtins - check for builtins
  *
- * @tnc: passed arguments
- * @tokens: shell's list
- * @argv: argument array
- * @extstus: exit status
+ * @cnt: number of arguments passed in shell
+ * @tokens: list of shell arguments
+ * @argv: command line arguments array
+ * @exit_status: exit status
+ * Return: void
  */
-int chbui(int tnc, char **tkns, int *extstus, char **argv)
+int check_builtins(int cnt, char **tokens, int *exit_status, char **argv)
 {
 	char **env = environ;
 	char newline = '\n';
 
-	if (tnc < 1)
+	if (cnt < 1)
 	{
 		return (2);
 	}
-	if (strcmp(tkns[0], "exit") == 0)
+	if (strcmp(tokens[0], "exit") == 0)
 	{
-		if (tkns[1] != NULL)
+		if (tokens[1] != NULL)
 		{
-			if (convertStringToInt(tkns[1]))
-				if (convertStringToInt(tkns[1]) >= 0)
-					*extstus = convertStringToInt(tkns[1]);
+			if (atoi(tokens[1]))
+				if (atoi(tokens[1]) >= 0)
+					*exit_status = _atoi(tokens[1]);
 				else
-					error_message(tkns, argv, extstus);
+					error_message(tokens, argv, exit_status);
 			else
 			{
-				error_message(tkns, argv, extstus);
+				error_message(tokens, argv, exit_status);
 			}
 		}
 		return (1);
 	}
-	if (strcmp(tkns[0], "env") == 0)
+	if (strcmp(tokens[0], "env") == 0)
 	{
 		env = environ;
 		while (*env != NULL)
@@ -108,9 +110,9 @@ int chbui(int tnc, char **tkns, int *extstus, char **argv)
 		}
 		return (2);
 	}
-	if (strcmp(tkns[0], "unsetenv") == 0)
+	if (strcmp(tokens[0], "unsetenv") == 0)
 	{
-		unsetEnvironmentVariable(tkns[1]);
+		_unsetenv(tokens[1]);
 		return (2);
 	}
 	return (0);
@@ -119,32 +121,32 @@ int chbui(int tnc, char **tkns, int *extstus, char **argv)
 
 
 /**
- * _pk - checks for executable file errors
+ * _ch - checks for executable file errors
  * @argv: command line argument list
  * @tokens: array of user input
- * @fpt: full path of command inputed
- * @extstus: exit status
+ * @fullpath: full path of command inputed
+ * @exit_status: exit status
  * Return: void
  */
-int _pk(char **argv, char **tokens, char **fpt, int *extstus)
+int _ch(char **argv, char **tokens, char **fullpath, int *exit_status)
 {
 	char newline = '\n';
-	char *path = getEnvironmentVariable("PATH");
+	char *path = _getenv("PATH");
 
 	if (access(tokens[0], X_OK) == -1)
 	{
-		*fpt = findfpt(tokens[0], path);
-		if (access(*fpt, X_OK) == -1)
+		*fullpath = _which(tokens[0], path);
+		if (access(*fullpath, X_OK) == -1)
 		{
 			write(STDERR_FILENO, argv[0], strlen(argv[0]));
 			write(STDERR_FILENO, ": 1: ", 5);
 			write(STDERR_FILENO, tokens[0], strlen(tokens[0]));
-			write(STDERR_FILENO, ": Illegal number:", 11);
+			write(STDERR_FILENO, ": not found", 11);
 			write(STDERR_FILENO, &newline, 1);
-			*extstus = 127;
+			*exit_status = 127;
 			return (2);
-		}
-	} 
+		} /* end if */
+	} /* end if */
 
 	return (0);
 }
@@ -160,12 +162,12 @@ int main(int argc __attribute__((unused)), char **argv)
 	size_t length = 0;
 	char *tokens[buffer];
 	int cnt, result;
-	char *fpt;
-	int extstus = 0;
+	char *fullpath;
+	int exit_status = 0;
 
 	while (1)
 	{
-		result = hept(&length, &line);
+		result = handle_prompt(&length, &line);
 		if (result == 1)
 			break; /* end  if */
 		cnt = 0;
@@ -176,23 +178,23 @@ int main(int argc __attribute__((unused)), char **argv)
 			tokens[cnt] = strtok(NULL, " \t\n");
 		} /* end while */
 		tokens[cnt] = NULL;
-		fpt = tokens[0];
-		result = check_builtins(cnt, tokens, &extstus, argv);
+		fullpath = tokens[0];
+		result = check_builtins(cnt, tokens, &exit_status, argv);
 		if (result == 1)
 			break; /* end if */
 		else if (result == 2)
 			continue; /* end else if */
-		result = _ch(argv, tokens, &fpt, &extstus);
+		result = _ch(argv, tokens, &fullpath, &exit_status);
 		if (result == 1)
 			break;/* end if */
 		else if (result == 2)
 			continue; /* else if */
-		result = exec_command(&extstus, fpt, tokens);
+		result = exec_command(&exit_status, fullpath, tokens);
 		if (result == 1)
 			break; /* end if */
 		else if (result == 2)
 			continue; /*end if*/
 	} /* End while */
 	free(line);
-	return (extstus);
+	return (exit_status);
 } /* end function */
