@@ -87,7 +87,7 @@ int chbui(int tnc, char **tkns, int *extstus, char **argv)
 		{
 			if (convertStringToInt(tkns[1]))
 				if (convertStringToInt(tkns[1]) >= 0)
-					*extstus = _convertStringToInt(tkns[1]);
+					*extstus = convertStringToInt(tkns[1]);
 				else
 					error_message(tkns, argv, extstus);
 			else
